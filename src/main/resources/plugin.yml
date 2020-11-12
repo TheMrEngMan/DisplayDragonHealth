@@ -1,0 +1,6 @@
+name: DisplayDragonHealth
+main: com.MrEngMan.DisplayDragonHealth.Main
+author: MrEngMan
+description: Show ender dragon health to all players
+api-version: '1.13'
+version: 1.0
