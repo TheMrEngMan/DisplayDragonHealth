@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.Objects;
 
 import static com.MrEngMan.DisplayDragonHealth.Main.dragonHealthBossBar;
+import static com.MrEngMan.DisplayDragonHealth.Main.endWorldName;
 
 public class EventListeners implements Listener {
 
@@ -33,13 +34,13 @@ public class EventListeners implements Listener {
         Player player = event.getPlayer();
 
         // If the player is now in the end
-        if (player.getWorld().getName().equals("world_the_end")) {
+        if (player.getWorld().getName().equals(endWorldName)) {
 
             // Make the dragon health bar visible and set all the players who are not in the end to see it
             dragonHealthBossBar.setVisible(true);
             dragonHealthBossBar.removeAll();
             for (Player currentPlayer : Bukkit.getServer().getOnlinePlayers()) {
-                if(!currentPlayer.getWorld().getName().equals("world_the_end")) {
+                if(!currentPlayer.getWorld().getName().equals(endWorldName)) {
                     dragonHealthBossBar.addPlayer(currentPlayer);
                 }
             }
@@ -47,7 +48,7 @@ public class EventListeners implements Listener {
         }
 
         // If the player has left the end
-        else if(event.getFrom().getName().equals("world_the_end")) {
+        else if(event.getFrom().getName().equals(endWorldName)) {
 
             // If all players left the end, make the dragon health bar invisible (and don't update it anymore)
             if (!Utils.checkIfSomePlayersAreInEnd()) {
@@ -66,7 +67,7 @@ public class EventListeners implements Listener {
 
     void checkToUpdateDragonHealth(Entity entity) {
         // If the entity is the Ender Dragon in the end dimension, update the dragon health bar according to the fractional remaining health it has
-        if (entity.getType() == EntityType.ENDER_DRAGON && entity.getWorld().getName().equals("world_the_end")) {
+        if (entity.getType() == EntityType.ENDER_DRAGON && entity.getWorld().getName().equals(endWorldName)) {
             EnderDragon enderDragon = (EnderDragon) entity;
             dragonHealthBossBar.setProgress(enderDragon.getHealth() / Objects.requireNonNull(enderDragon.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
         }
@@ -95,7 +96,7 @@ public class EventListeners implements Listener {
         Player player = event.getEntity();
 
         // If a player dies in the end and they were the only player there, make the dragon health bar invisible (and don't update it anymore)
-        if (player.getWorld().getName().equals("world_the_end") && Utils.getNumberOfPlayersInEnd() == 1) {
+        if (player.getWorld().getName().equals(endWorldName) && Utils.getNumberOfPlayersInEnd() == 1) {
             dragonHealthBossBar.setVisible(false);
         }
 
@@ -108,16 +109,16 @@ public class EventListeners implements Listener {
         Player player = event.getPlayer();
 
         // If a player joins and they are not in th end, but someone is, set this player to see the dragon health bar
-        if (!player.getWorld().getName().equals("world_the_end") && Utils.checkIfSomePlayersAreInEnd()) {
+        if (!player.getWorld().getName().equals(endWorldName) && Utils.checkIfSomePlayersAreInEnd()) {
             dragonHealthBossBar.addPlayer(player);
         }
         // Otherwise, make the dragon health bar visible and set all the players who are not in the end to see it
-        else if (player.getWorld().getName().equals("world_the_end")) {
+        else if (player.getWorld().getName().equals(endWorldName)) {
 
             dragonHealthBossBar.setVisible(true);
             dragonHealthBossBar.removeAll();
             for (Player currentPlayer : Bukkit.getServer().getOnlinePlayers()) {
-                if (!currentPlayer.getWorld().getName().equals("world_the_end")) {
+                if (!currentPlayer.getWorld().getName().equals(endWorldName)) {
                     dragonHealthBossBar.addPlayer(currentPlayer);
                 }
             }
@@ -133,7 +134,7 @@ public class EventListeners implements Listener {
         dragonHealthBossBar.removePlayer(player);
 
         // If a player leaves while in the end and they were the only player there, make the dragon health bar invisible (and don't update it anymore)
-        if (player.getWorld().getName().equals("world_the_end") && Utils.getNumberOfPlayersInEnd() == 1) {
+        if (player.getWorld().getName().equals(endWorldName) && Utils.getNumberOfPlayersInEnd() == 1) {
             dragonHealthBossBar.setVisible(false);
         }
 
